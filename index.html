@@ -3,334 +3,400 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{{ .subTitle }} — Подписка</title>
+<title> — Подписка</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --accent: #5B8AF0;
-    --accent2: #A78BFA;
-    --green: #34D399;
-    --red: #F87171;
-    --amber: #FBBF24;
-    --bg: #0C0E1A;
-    --surface: rgba(255,255,255,0.04);
-    --surface2: rgba(255,255,255,0.07);
-    --border: rgba(255,255,255,0.08);
-    --border2: rgba(255,255,255,0.14);
-    --text: #F0F2FF;
-    --muted: rgba(240,242,255,0.5);
-    --faint: rgba(240,242,255,0.25);
-    --radius: 16px;
-    --radius-sm: 10px;
+    --bg: #020205;
+    --surface: rgba(255, 255, 255, 0.03);
+    --surface2: rgba(255, 255, 255, 0.05);
+    --border: rgba(255, 255, 255, 0.08);
+    --border2: rgba(255, 255, 255, 0.15);
+    --text: #FFFFFF;
+    --muted: #8A8A93;
+    --faint: #4A4A52;
+    --accent: #00D1FF; /* Космический циан */
+    --accent2: #7B61FF; /* Туманность пурпур */
+    --green: #12B886;
+    --red: #FA5252;
+    --amber: #F59F00;
+    --radius: 24px;
+    --radius-sm: 14px;
   }
 
   html, body {
     min-height: 100vh;
     background: var(--bg);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
 
-  /* ── BACKGROUND ── */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #050508; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* ── COSMIC BACKGROUND ── */
   .bg-canvas {
     position: fixed; inset: 0; z-index: 0; overflow: hidden;
+    pointer-events: none;
+    background: radial-gradient(ellipse at top, #0a0a12 0%, #020205 60%, #000000 100%);
   }
-  .bg-canvas canvas { position: absolute; inset: 0; }
-  .bg-orb {
-    position: absolute; border-radius: 50%; filter: blur(80px); opacity: .18;
-    animation: orb-drift 18s ease-in-out infinite alternate;
+  
+  /* Туманности */
+  .nebula {
+    position: absolute; 
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    animation: float-nebula 20s ease-in-out infinite;
   }
-  .bg-orb:nth-child(2) { width:520px;height:520px;background:#5B8AF0;top:-120px;left:-80px; animation-delay:0s; }
-  .bg-orb:nth-child(3) { width:420px;height:420px;background:#A78BFA;bottom:-100px;right:-60px; animation-delay:-6s; }
-  .bg-orb:nth-child(4) { width:280px;height:280px;background:#34D399;top:40%;left:50%;transform:translate(-50%,-50%); animation-delay:-12s; }
-  @keyframes orb-drift {
-    0%   { transform: translate(0,0) scale(1); }
-    100% { transform: translate(30px,20px) scale(1.08); }
+  .nebula-1 {
+    width: 800px; height: 800px;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(circle, rgba(0, 209, 255, 0.15) 0%, transparent 70%);
   }
-  .bg-orb:nth-child(4) {
-    animation: orb-drift2 14s ease-in-out infinite alternate;
+  .nebula-2 {
+    width: 600px; height: 600px;
+    top: 30%; right: -100px;
+    background: radial-gradient(circle, rgba(123, 97, 255, 0.12) 0%, transparent 70%);
+    animation-delay: 5s;
   }
-  @keyframes orb-drift2 {
-    0%   { transform: translate(-50%,-50%) scale(1); }
-    100% { transform: translate(calc(-50% + 20px),calc(-50% + 15px)) scale(1.1); }
+  .nebula-3 {
+    width: 500px; height: 500px;
+    bottom: 0; left: -100px;
+    background: radial-gradient(circle, rgba(255, 0, 122, 0.08) 0%, transparent 70%);
+    animation-delay: 10s;
   }
-  .bg-grid {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
-    background-size: 48px 48px;
+  @keyframes float-nebula {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-20px, 20px) scale(1.05); }
   }
-  .bg-vignette {
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse 80% 80% at 50% 50%, transparent 40%, rgba(12,14,26,.85) 100%);
+
+  #starfield {
+    position: absolute; inset: 0; width: 100%; height: 100%;
   }
 
   /* ── LAYOUT ── */
   .page {
-    position: relative; z-index: 1;
+    position: relative; z-index: 2;
     min-height: 100vh;
     display: flex; flex-direction: column; align-items: center;
-    padding: 48px 16px 64px;
-    gap: 20px;
+    padding: 64px 16px 80px;
+    gap: 24px;
+  }
+
+  /* ── 3D SPHERE MODEL ── */
+  .sphere-container {
+    perspective: 1000px;
+    width: 140px; height: 140px;
+    margin: 0 auto 32px;
+  }
+  .sphere-3d {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotate-sphere 15s linear infinite;
+  }
+  .sphere-ring {
+    position: absolute; inset: 0;
+    border: 1px solid rgba(0, 209, 255, 0.3);
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(0, 209, 255, 0.1), inset 0 0 15px rgba(0, 209, 255, 0.1);
+  }
+  .sphere-core {
+    position: absolute; top: 50%; left: 50%;
+    width: 20px; height: 20px;
+    background: var(--accent);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent), 0 0 60px rgba(0, 209, 255, 0.5);
+    animation: core-pulse 2s ease-in-out infinite;
+  }
+  @keyframes rotate-sphere {
+    0% { transform: rotateX(0deg) rotateY(0deg); }
+    100% { transform: rotateX(360deg) rotateY(360deg); }
+  }
+  @keyframes core-pulse {
+    0%, 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.3); }
   }
 
   /* ── HEADER ── */
   .header {
     text-align: center;
-    animation: fade-up .6s ease both;
+    animation: fade-up .8s cubic-bezier(.2,.8,.2,1) both;
+    margin-bottom: 8px;
   }
-  .logo-wrap {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 64px; height: 64px;
-    background: linear-gradient(135deg, rgba(91,138,240,.2), rgba(167,139,250,.2));
-    border: 1px solid rgba(91,138,240,.3);
-    border-radius: 18px;
-    margin-bottom: 14px;
-  }
-  .logo-wrap svg { width: 30px; height: 30px; }
   .header h1 {
-    font-size: 22px; font-weight: 600; letter-spacing: -.3px;
-    background: linear-gradient(135deg, #fff 30%, #A78BFA);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    font-size: 42px; font-weight: 800; letter-spacing: -1.5px; line-height: 1.1;
+    background: linear-gradient(135deg, #FFFFFF 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
-  .header p { font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .header p { font-size: 15px; color: var(--muted); margin-top: 12px; font-weight: 500; letter-spacing: 0.02em; }
 
-  /* ── CARDS ── */
+  /* ── CARDS (Glassmorphism) ── */
   .card {
     width: 100%; max-width: 480px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 22px 24px;
+    background: rgba(10, 10, 15, 0.6);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    animation: fade-up .6s ease both;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    animation: fade-up .8s cubic-bezier(.2,.8,.2,1) both;
+    transition: border-color .3s ease, box-shadow .3s ease;
   }
-  .card:nth-child(2) { animation-delay:.07s; }
-  .card:nth-child(3) { animation-delay:.14s; }
-  .card:nth-child(4) { animation-delay:.21s; }
-  .card:nth-child(5) { animation-delay:.28s; }
+  .card:hover {
+    border-color: var(--border2);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 209, 255, 0.05);
+  }
+  .card:nth-child(2) { animation-delay:.1s; }
+  .card:nth-child(3) { animation-delay:.2s; }
+  .card:nth-child(4) { animation-delay:.3s; }
+  .card:nth-child(5) { animation-delay:.4s; }
 
   @keyframes fade-up {
-    from { opacity:0; transform:translateY(18px); }
+    from { opacity:0; transform:translateY(24px); }
     to   { opacity:1; transform:translateY(0); }
   }
 
   /* ── STATUS ROW ── */
   .status-row {
     display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 28px;
   }
   .badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;
+    background: var(--surface2);
   }
-  .badge.on  { background: rgba(52,211,153,.12); color: #34D399; border: 1px solid rgba(52,211,153,.25); }
-  .badge.off { background: rgba(248,113,113,.12); color: #F87171; border: 1px solid rgba(248,113,113,.25); }
-  .badge-dot { width:6px;height:6px;border-radius:50%; }
-  .badge.on  .badge-dot { background:#34D399; animation: pulse-dot 2s infinite; }
-  .badge.off .badge-dot { background:#F87171; }
+  .badge.on  { background: rgba(18,184,134,.15); color: var(--green); border: 1px solid rgba(18,184,134,0.2); }
+  .badge.off { background: rgba(250,82,82,.15); color: var(--red); border: 1px solid rgba(250,82,82,0.2); }
+  .badge-dot { width:8px;height:8px;border-radius:50%; }
+  .badge.on  .badge-dot { background: var(--green); animation: pulse-dot 2s infinite; box-shadow: 0 0 8px var(--green); }
+  .badge.off .badge-dot { background: var(--red); }
   @keyframes pulse-dot {
-    0%,100% { opacity:1; box-shadow:0 0 0 0 rgba(52,211,153,.5); }
-    50%      { opacity:.8; box-shadow:0 0 0 4px rgba(52,211,153,0); }
+    0%,100% { opacity:1; transform: scale(1); }
+    50%     { opacity:.6; transform: scale(1.25); }
   }
-  .sid-text { font-size: 11px; color: var(--faint); font-family: monospace; }
+  .sid-text { font-size: 12px; color: var(--faint); font-family: 'SF Mono', monospace; font-weight: 500; }
 
   /* ── TRAFFIC BAR ── */
-  .traffic-section { margin-bottom: 20px; }
+  .traffic-section { margin-bottom: 24px; }
   .traffic-label-row {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 8px;
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 12px;
   }
-  .traffic-label-row span:first-child { font-size: 12px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: .06em; }
-  .traffic-pct { font-size: 12px; font-weight: 600; }
+  .traffic-label-row span:first-child { font-size: 13px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+  .traffic-pct { font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.5px; }
   .bar-track {
-    height: 6px; background: rgba(255,255,255,.07);
+    height: 8px; background: var(--surface2);
     border-radius: 99px; overflow: hidden;
   }
   .bar-fill {
     height: 100%; border-radius: 99px;
     background: linear-gradient(90deg, var(--accent), var(--accent2));
-    transition: width .8s cubic-bezier(.4,0,.2,1);
+    transition: width 1s cubic-bezier(.4,0,.2,1);
     position: relative;
+    box-shadow: 0 0 10px rgba(0, 209, 255, 0.4);
   }
-  .bar-fill::after {
-    content:''; position:absolute; right:0; top:0; bottom:0; width:20px;
-    background: rgba(255,255,255,.3);
-    animation: bar-shine 2.5s ease-in-out infinite;
-  }
-  @keyframes bar-shine {
-    0%,100% { opacity:0; } 50% { opacity:1; }
-  }
-  .bar-fill.warn { background: linear-gradient(90deg, var(--amber), #F97316); }
-  .bar-fill.crit { background: linear-gradient(90deg, var(--red), #DC2626); }
+  .bar-fill.warn { background: linear-gradient(90deg, var(--amber), #ff7b00); box-shadow: 0 0 10px rgba(245, 159, 0, 0.4); }
+  .bar-fill.crit { background: linear-gradient(90deg, var(--red), #c92a2a); box-shadow: 0 0 10px rgba(250, 82, 82, 0.4); }
 
   /* ── STATS GRID ── */
   .stats-grid {
-    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 16px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 24px;
   }
   .stat-box {
     background: var(--surface2); border-radius: var(--radius-sm);
-    padding: 12px 10px; text-align: center;
+    padding: 16px 12px; text-align: center;
     border: 1px solid var(--border);
+    transition: transform .2s ease, border-color .2s;
   }
-  .stat-val { font-size: 15px; font-weight: 600; color: var(--text); }
-  .stat-lbl { font-size: 10px; color: var(--muted); margin-top: 3px; text-transform: uppercase; letter-spacing: .05em; }
+  .stat-box:hover { transform: translateY(-2px); border-color: var(--border2); }
+  .stat-val { font-size: 18px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+  .stat-lbl { font-size: 11px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .04em; font-weight: 500; }
 
   /* ── META ROWS ── */
-  .divider { height: 1px; background: var(--border); margin: 18px 0; }
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
   .meta-row {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 7px 0; font-size: 13px;
+    padding: 8px 0; font-size: 14px;
   }
-  .meta-key { display: flex; align-items: center; gap: 8px; color: var(--muted); }
-  .meta-key svg { width:14px;height:14px;opacity:.6;flex-shrink:0; }
-  .meta-val { font-weight: 500; color: var(--text); }
+  .meta-key { display: flex; align-items: center; gap: 10px; color: var(--muted); font-weight: 500; }
+  .meta-key svg { width:16px;height:16px;flex-shrink:0; stroke: var(--accent); opacity: 0.8; }
+  .meta-val { font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; }
   .meta-val.warn { color: var(--amber); }
   .meta-val.crit { color: var(--red); }
-  .online-indicator { display:flex;align-items:center;gap:6px; }
-  .online-dot { width:6px;height:6px;border-radius:50%;background:var(--green); animation:pulse-dot 2s infinite; }
-  .online-dot.old { background:var(--muted);animation:none; }
+  .online-indicator { display:flex; align-items:center; gap:8px; }
+  .online-dot { width:8px;height:8px;border-radius:50%;background:var(--green); animation:pulse-dot 2s infinite; box-shadow: 0 0 8px var(--green); }
+  .online-dot.old { background:var(--faint);animation:none; box-shadow:none; }
 
   /* ── APP BUTTONS ── */
   .section-label {
-    font-size: 11px; color: var(--muted); text-transform: uppercase;
-    letter-spacing: .08em; font-weight: 600; margin-bottom: 14px;
+    font-size: 13px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: .05em; font-weight: 600; margin-bottom: 20px;
   }
-  .app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .app-btn {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 8px; padding: 16px 12px;
+    gap: 10px; padding: 20px 12px;
     background: var(--surface2); border: 1px solid var(--border);
     border-radius: var(--radius-sm); cursor: pointer; text-decoration: none;
-    transition: background .15s, border-color .15s, transform .12s;
+    transition: all .2s cubic-bezier(.2,.8,.2,1);
     color: var(--text);
   }
-  .app-btn:hover { background: rgba(255,255,255,.1); border-color: var(--border2); transform: translateY(-2px); }
+  .app-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.3); }
   .app-btn:active { transform: scale(.97); }
   .app-icon {
-    width: 36px; height: 36px; border-radius: 10px;
+    width: 42px; height: 42px; border-radius: 12px;
     display: flex; align-items: center; justify-content: center;
   }
-  .app-icon svg { width:20px;height:20px; }
-  .app-icon.blue   { background: rgba(91,138,240,.15); color: #5B8AF0; border: 1px solid rgba(91,138,240,.25); }
-  .app-icon.purple { background: rgba(167,139,250,.15); color: #A78BFA; border: 1px solid rgba(167,139,250,.25); }
-  .app-icon.green  { background: rgba(52,211,153,.15);  color: #34D399; border: 1px solid rgba(52,211,153,.25); }
-  .app-icon.amber  { background: rgba(251,191,36,.15);  color: #FBBF24; border: 1px solid rgba(251,191,36,.25); }
+  .app-icon svg { width:22px;height:22px; }
+  .app-icon.blue   { background: rgba(28,126,214,.15); color: #74c0fc; }
+  .app-icon.purple { background: rgba(112,72,232,.15); color: #b197fc; }
+  .app-icon.green  { background: rgba(12,166,120,.15); color: #63e6be; }
+  .app-icon.amber  { background: rgba(240,140,0,.15); color: #ffe066; }
+  
   .app-btn-featured {
-    flex-direction: row; justify-content: flex-start; padding: 14px 16px;
-    border-color: rgba(167,139,250,.25);
-    background: linear-gradient(135deg, rgba(91,138,240,.06), rgba(167,139,250,.08));
+    display: flex; flex-direction: row; align-items: center; gap: 14px;
+    padding: 16px 20px; width: 100%;
+    border: 1px solid var(--accent);
+    background: linear-gradient(135deg, rgba(0,209,255,0.1), rgba(123,97,255,0.1));
+    color: #fff;
     position: relative; overflow: hidden;
+    margin-bottom: 12px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
   }
-  .app-btn-featured::before {
-    content:''; position:absolute; inset:0;
-    background: linear-gradient(135deg, rgba(91,138,240,.04), rgba(167,139,250,.04));
-    opacity:0; transition: opacity .2s;
+  .app-btn-featured:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(0, 209, 255, 0.15);
+    background: linear-gradient(135deg, rgba(0,209,255,0.2), rgba(123,97,255,0.2));
   }
-  .app-btn-featured:hover::before { opacity:1; }
-  .app-btn-featured:hover { border-color: rgba(167,139,250,.45); transform: translateY(-2px); }
-  .app-name { font-size: 12px; font-weight: 600; color: var(--text); }
-  .app-sub  { font-size: 10px; color: var(--muted); margin-top: -4px; }
+  .app-btn-featured .app-content { flex: 1; text-align: left; }
+  .app-btn-featured .app-title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 2px; }
+  .app-btn-featured .app-name { font-size: 16px; font-weight: 700; color: #fff; }
+  .app-btn-featured .app-sub { font-size: 12px; color: var(--muted); font-weight: 500; }
+  .app-btn-featured .app-arrow { width: 18px; height: 18px; color: var(--accent); flex-shrink: 0; transition: transform .2s; }
+  .app-btn-featured:hover .app-arrow { transform: translateX(4px); }
+  .app-recommend-badge {
+    background: var(--accent); color: #000; 
+    font-size: 10px; font-weight: 700; padding: 3px 8px;
+    border-radius: 20px; 
+    text-transform: uppercase; letter-spacing: .03em;
+  }
+  
+  .app-name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .app-sub  { font-size: 11px; color: var(--muted); margin-top: -2px; font-weight: 500; }
 
   /* ── COPY ROW ── */
-  .copy-section { margin-top: 14px; }
+  .copy-section { margin-top: 20px; }
   .copy-input-wrap {
     display: flex; gap: 8px;
-    background: rgba(255,255,255,.04); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 3px 3px 3px 12px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 5px 5px 5px 16px;
     align-items: center;
+    transition: border-color .2s, background .2s;
   }
+  .copy-input-wrap:focus-within { background: rgba(0,0,0,0.3); border-color: var(--accent); }
   .copy-input-wrap input {
     flex: 1; background: none; border: none; outline: none;
-    font-size: 12px; color: var(--muted); font-family: monospace;
+    font-size: 13px; color: var(--text); font-family: 'SF Mono', monospace;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
+  .copy-input-wrap input::placeholder { color: var(--faint); }
   .copy-btn {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border: none; border-radius: 8px;
-    padding: 8px 16px; font-size: 12px; font-weight: 600; color: #fff;
-    cursor: pointer; white-space: nowrap; transition: opacity .15s, transform .12s;
+    background: #fff;
+    border: none; border-radius: 10px;
+    padding: 10px 20px; font-size: 13px; font-weight: 600; color: #000;
+    cursor: pointer; white-space: nowrap; transition: all .2s;
     flex-shrink: 0;
   }
-  .copy-btn:hover { opacity: .88; }
+  .copy-btn:hover { opacity: .85; transform: translateY(-1px); }
   .copy-btn:active { transform: scale(.96); }
-  .copy-btn.copied { background: linear-gradient(135deg, var(--green), #059669); }
+  .copy-btn.copied { background: var(--green); color: #fff; }
 
   /* ── LINKS LIST ── */
-  .links-list { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .links-list { display: flex; flex-direction: column; gap: 10px; margin-top: 4px; }
   .link-row {
     display: flex; align-items: center; justify-content: space-between;
     background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 10px 12px; gap: 10px;
+    border-radius: var(--radius-sm); padding: 14px 16px; gap: 12px;
+    transition: background .2s, border-color .2s;
   }
+  .link-row:hover { background: rgba(255,255,255,0.08); border-color: var(--border2); }
   .link-info { overflow: hidden; }
   .link-proto {
-    font-size: 11px; font-weight: 700; letter-spacing: .05em;
-    padding: 2px 6px; border-radius: 4px; display: inline-block; margin-bottom: 3px;
+    font-size: 10px; font-weight: 700; letter-spacing: .04em;
+    padding: 3px 8px; border-radius: 6px; display: inline-block; margin-bottom: 6px;
+    text-transform: uppercase;
   }
-  .link-proto.vless    { background:rgba(91,138,240,.15);color:#5B8AF0; }
-  .link-proto.vmess    { background:rgba(167,139,250,.15);color:#A78BFA; }
-  .link-proto.hysteria2{ background:rgba(52,211,153,.15);color:#34D399; }
-  .link-proto.trojan   { background:rgba(251,191,36,.15);color:#FBBF24; }
-  .link-proto.ss       { background:rgba(248,113,113,.15);color:#F87171; }
-  .link-name { font-size: 12px; font-weight: 500; color: var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:240px; }
-  .link-host { font-size: 11px; color: var(--faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:240px; }
+  .link-proto.vless    { background:rgba(28,126,214,.2);color:#74c0fc; }
+  .link-proto.vmess    { background:rgba(112,72,232,.2);color:#b197fc; }
+  .link-proto.hysteria2{ background:rgba(12,166,120,.2);color:#63e6be; }
+  .link-proto.trojan   { background:rgba(240,140,0,.2);color:#ffe066; }
+  .link-proto.ss       { background:rgba(250,82,82,.2);color:#ffa8a8; }
+  .link-name { font-size: 14px; font-weight: 500; color: var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:240px; }
+  .link-host { font-size: 12px; color: var(--faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:240px; font-family: 'SF Mono', monospace; margin-top: 2px; }
   .link-copy-btn {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 7px; padding: 5px 10px; font-size: 11px;
-    color: var(--muted); cursor: pointer; flex-shrink: 0;
-    transition: border-color .15s, color .15s;
+    background: transparent; border: 1px solid var(--border2);
+    border-radius: 8px; padding: 8px 14px; font-size: 12px; font-weight: 600;
+    color: var(--text); cursor: pointer; flex-shrink: 0;
+    transition: all .2s;
   }
-  .link-copy-btn:hover { border-color: var(--border2); color: var(--text); }
-  .link-copy-btn.copied { color: var(--green); border-color: rgba(52,211,153,.4); }
+  .link-copy-btn:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+  .link-copy-btn.copied { background: var(--green); color: #fff; border-color: var(--green); }
 
   /* ── FOOTER ── */
   .footer {
-    font-size: 12px; color: var(--faint); text-align: center;
-    animation: fade-up .6s .35s ease both;
+    font-size: 13px; color: var(--faint); text-align: center;
+    animation: fade-up .8s .5s cubic-bezier(.2,.8,.2,1) both;
+    padding-top: 20px;
   }
-  .footer a { color: var(--muted); text-decoration: none; }
-  .footer a:hover { color: var(--text); }
+  .footer a { color: var(--muted); text-decoration: none; transition: color .2s; border-bottom: 1px solid transparent; }
+  .footer a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 
   /* ── RESPONSIVE ── */
   @media (max-width: 420px) {
     .app-grid { grid-template-columns: 1fr 1fr; }
-    .card { padding: 18px 16px; }
+    .card { padding: 24px 20px; }
     .stats-grid { gap: 8px; }
+    .header h1 { font-size: 32px; }
+    .sphere-container { width: 100px; height: 100px; }
   }
 </style>
 </head>
 <body>
 
+<!-- Cosmic Background -->
 <div class="bg-canvas">
-  <div class="bg-orb"></div>
-  <div class="bg-orb"></div>
-  <div class="bg-orb"></div>
-  <div class="bg-grid"></div>
-  <div class="bg-vignette"></div>
+  <canvas id="starfield"></canvas>
+  <div class="nebula nebula-1"></div>
+  <div class="nebula nebula-2"></div>
+  <div class="nebula nebula-3"></div>
 </div>
 
 <div class="page">
 
-  <!-- HEADER -->
+  <!-- HEADER & 3D MODEL -->
   <div class="header">
-    <div class="logo-wrap">
-      <svg viewBox="0 0 24 24" fill="none" stroke="url(#lg1)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <defs>
-          <linearGradient id="lg1" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stop-color="#5B8AF0"/>
-            <stop offset="100%" stop-color="#A78BFA"/>
-          </linearGradient>
-        </defs>
-        <path d="M12 2L3 7l9 5 9-5-9-5z"/>
-        <path d="M3 12l9 5 9-5"/>
-        <path d="M3 17l9 5 9-5"/>
-      </svg>
+    <div class="sphere-container">
+      <div class="sphere-3d" id="sphere-3d">
+        <div class="sphere-core"></div>
+        <!-- Rings are generated by JS -->
+      </div>
     </div>
     <h1 id="page-title">zapretcore</h1>
     <p>Панель управления подпиской</p>
@@ -349,7 +415,7 @@
     <div class="traffic-section">
       <div class="traffic-label-row">
         <span>Трафик</span>
-        <span class="traffic-pct" id="traffic-pct" style="color:var(--accent)">0%</span>
+        <span class="traffic-pct" id="traffic-pct" style="color:var(--text)">0%</span>
       </div>
       <div class="bar-track">
         <div class="bar-fill" id="bar-fill" style="width:0%"></div>
@@ -375,28 +441,28 @@
 
     <div class="meta-row">
       <span class="meta-key">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         Истекает
       </span>
       <span class="meta-val" id="expire-val">—</span>
     </div>
     <div class="meta-row">
       <span class="meta-key">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
         Последний вход
       </span>
       <span class="meta-val" id="last-val">—</span>
     </div>
     <div class="meta-row">
       <span class="meta-key">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 16 12 21 17 16"/><path d="M12 21V3"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 16 12 21 17 16"/><path d="M12 21V3"/></svg>
         Скачано
       </span>
       <span class="meta-val" id="dl-val">—</span>
     </div>
     <div class="meta-row">
       <span class="meta-key">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 8 12 3 7 8"/><path d="M12 3v18"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 8 12 3 7 8"/><path d="M12 3v18"/></svg>
         Загружено
       </span>
       <span class="meta-val" id="ul-val">—</span>
@@ -408,50 +474,47 @@
     <div class="section-label">Подключить приложение</div>
 
     <a class="app-btn app-btn-featured" id="btn-happ" href="#" target="_blank">
-      <div style="display:flex;align-items:center;gap:14px;width:100%">
-        <div class="app-icon" style="background:linear-gradient(135deg,rgba(91,138,240,.2),rgba(167,139,250,.2));border:1px solid rgba(167,139,250,.35);flex-shrink:0">
-          <svg viewBox="0 0 24 24" fill="none" stroke="url(#lg-happ)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <defs><linearGradient id="lg-happ" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#5B8AF0"/><stop offset="100%" stop-color="#A78BFA"/></linearGradient></defs>
-            <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
-            <path d="M8 12h8M12 8l4 4-4 4"/>
-          </svg>
-        </div>
-        <div style="flex:1;text-align:left">
-          <div style="display:flex;align-items:center;gap:8px">
-            <span class="app-name" style="font-size:14px">Happ</span>
-            <span style="background:linear-gradient(135deg,rgba(91,138,240,.2),rgba(167,139,250,.2));color:#A78BFA;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;border:1px solid rgba(167,139,250,.3)">РЕКОМЕНДУЕТСЯ</span>
-          </div>
-          <span class="app-sub" style="font-size:12px">iOS · Android · Нажми — подпишется сам</span>
-        </div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="rgba(167,139,250,.6)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;flex-shrink:0"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      <div class="app-icon" style="background: rgba(0, 209, 255, 0.15); flex-shrink:0; width:42px; height:42px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#00D1FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px">
+          <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+          <path d="M8 12h8M12 8l4 4-4 4"/>
+        </svg>
       </div>
+      <div class="app-content">
+        <div class="app-title-row">
+          <span class="app-name">Happ</span>
+          <span class="app-recommend-badge">Рекомендуется</span>
+        </div>
+        <span class="app-sub">iOS · Android · Нажми — подпишется сам</span>
+      </div>
+      <svg class="app-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </a>
 
-    <div class="app-grid" style="margin-top:10px">
+    <div class="app-grid">
       <a class="app-btn" id="btn-hiddify" href="#" target="_blank">
         <div class="app-icon blue">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10A15 15 0 0 1 8 12a15 15 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10A15 15 0 0 1 8 12a15 15 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
         </div>
         <span class="app-name">Hiddify</span>
         <span class="app-sub">iOS / Android / PC</span>
       </a>
       <a class="app-btn" id="btn-v2rayn" href="#" target="_blank">
         <div class="app-icon purple">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
         </div>
         <span class="app-name">v2rayN</span>
         <span class="app-sub">Windows / Linux</span>
       </a>
       <a class="app-btn" id="btn-clash" href="#" target="_blank">
         <div class="app-icon green">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
         </div>
         <span class="app-name">Clash / Mihomo</span>
         <span class="app-sub">Все платформы</span>
       </a>
       <a class="app-btn" id="btn-streisand" href="#" target="_blank">
         <div class="app-icon amber">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
         </div>
         <span class="app-name">Streisand</span>
         <span class="app-sub">iOS / macOS</span>
@@ -459,7 +522,7 @@
     </div>
 
     <div class="copy-section">
-      <div class="copy-input-wrap" style="margin-top:14px;">
+      <div class="copy-input-wrap">
         <input type="text" id="sub-url-input" readonly placeholder="Ссылка подписки..." />
         <button class="copy-btn" id="copy-sub-btn" onclick="copyUrl('sub-url-input','copy-sub-btn')">Копировать</button>
       </div>
@@ -469,7 +532,7 @@
   <!-- JSON / CLASH LINKS -->
   <div class="card" id="extra-links-card">
     <div class="section-label">Дополнительные форматы</div>
-    <div style="display:flex;flex-direction:column;gap:8px;">
+    <div style="display:flex;flex-direction:column;gap:10px;">
       <div class="copy-input-wrap">
         <input type="text" id="clash-url-input" readonly placeholder="Clash / Mihomo URL..." />
         <button class="copy-btn" onclick="copyUrl('clash-url-input',this)">Clash</button>
@@ -496,6 +559,68 @@
 </div>
 
 <script>
+// ── STARFIELD LOGIC ────────────────────────────────────────────────────────
+const canvas = document.getElementById('starfield');
+const ctx = canvas.getContext('2d');
+let stars = [];
+
+function resizeStarfield() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  stars = [];
+  const numStars = Math.floor((canvas.width * canvas.height) / 6000);
+  for(let i=0; i<numStars; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      z: Math.random() * 0.5 + 0.5,
+      r: Math.random() * 1.2,
+      tw: Math.random() * Math.PI * 2,
+      tw_speed: Math.random() * 0.03 + 0.01
+    });
+  }
+}
+
+function drawStarfield() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for(let i=0; i<stars.length; i++) {
+    const s = stars[i];
+    s.tw += s.tw_speed;
+    const opacity = (Math.sin(s.tw) * 0.4 + 0.6) * s.z;
+    
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, Math.max(0.1, s.r * s.z), 0, Math.PI * 2);
+    
+    // Рандомизированные цвета для реалистичности (белый, циан, пурпурный)
+    if (i % 80 === 0) ctx.fillStyle = `rgba(0, 209, 255, ${opacity})`;
+    else if (i % 120 === 0) ctx.fillStyle = `rgba(123, 97, 255, ${opacity})`;
+    else ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+    
+    ctx.fill();
+  }
+  requestAnimationFrame(drawStarfield);
+}
+
+window.addEventListener('resize', resizeStarfield);
+resizeStarfield();
+drawStarfield();
+
+// ── 3D SPHERE LOGIC ────────────────────────────────────────────────────────
+const sphere3d = document.getElementById('sphere-3d');
+for(let i=0; i<8; i++) {
+  const ring = document.createElement('div');
+  ring.className = 'sphere-ring';
+  ring.style.transform = `rotateY(${i * 22.5}deg)`;
+  sphere3d.appendChild(ring);
+}
+for(let i=0; i<8; i++) {
+  const ring = document.createElement('div');
+  ring.className = 'sphere-ring';
+  ring.style.transform = `rotateX(${i * 22.5}deg)`;
+  sphere3d.appendChild(ring);
+}
+
+// ── DATA & LOGIC ───────────────────────────────────────────────────────────
 const D = {
   sId:          "{{ .sId }}",
   enabled:      {{ .enabled }},
@@ -569,7 +694,6 @@ function makeHiddifyUrl(sub) {
   return 'hiddify://import/' + encodeURIComponent(sub);
 }
 function makeV2rayNUrl(sub) {
-  // v2rayN uses custom protocol for import
   return 'v2rayn://sub?url=' + encodeURIComponent(sub);
 }
 function makeClashUrl(clash) {
@@ -610,7 +734,7 @@ function render(d) {
   const pctEl = document.getElementById('traffic-pct');
   if (pct >= 90) { bar.className='bar-fill crit'; pctEl.style.color='var(--red)'; }
   else if (pct >= 70) { bar.className='bar-fill warn'; pctEl.style.color='var(--amber)'; }
-  else { pctEl.style.color='var(--accent)'; }
+  else { pctEl.style.color='var(--text)'; }
   pctEl.textContent = pct + '%';
 
   // Stats
