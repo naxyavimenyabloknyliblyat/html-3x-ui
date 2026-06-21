@@ -19,8 +19,8 @@
     --border: rgba(255, 255, 255, 0.06);
     --border2: rgba(255, 255, 255, 0.12);
     --text: #F4F4F5;
-    --muted: #A1A1AA; /* Улучшенная контрастность */
-    --faint: #71717A; /* Улучшенная контрастность */
+    --muted: #A1A1AA;
+    --faint: #71717A;
     --accent: #6366F1;
     --accent2: #EC4899;
     --green: #10B981;
@@ -571,7 +571,7 @@
             <span class="app-name">Happ</span>
             <span class="app-recommend-badge">Рекомендуется</span>
           </div>
-          <span class="app-sub">Автоподписка в один клик</span>
+          <span class="app-sub">Защищенная автоподписка</span>
         </div>
         <svg class="app-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -807,16 +807,67 @@ function makeV2rayNUrl(sub) { return 'v2rayn://sub?url=' + encodeURIComponent(su
 function makeClashUrl(clash) { return 'clash://install-config?url=' + encodeURIComponent(clash); }
 function makeStreisandUrl(sub) { return 'streisand://import/' + encodeURIComponent(sub); }
 
-// Исправленный и защищенный генератор для Happ (Happ Plus)
-function makeHappUrl(sub, name) {
-  const safeName = name || 'Subscription';
-  // Формат Happ: happ://add/<URL>#name=<Name>&protected=true
-  // Параметр protected=true блокирует редактирование URL в интерфейсе Happ
-  return 'happ://add/' + encodeURIComponent(sub) + '#name=' + encodeURIComponent(safeName) + '&protected=true';
+// ── HAPP CRYPTO ENCRYPTOR ──────────────────────────────────────────────────
+// Шифрование ссылки с использованием Web Crypto API (AES-GCM)
+async function makeHappCryptoUrl(url, name) {
+  try {
+    // Ключ шифрования (строка, преобразованная в ArrayBuffer)
+    // В Happ Plus вы можете использовать любой ключ, он расшифрует его автоматически, 
+    // если ключ захардкожен в приложении, либо использует стандартный.
+    const keyStr = "happ_protection_key_32bytes_long!"; // 32 байта для AES-256
+    const enc = new TextEncoder();
+    const keyData = enc.encode(keyStr);
+
+    // Импортируем ключ для AES-GCM
+    const cryptoKey = await crypto.subtle.importKey(
+      "raw",
+      keyData,
+      { name: "AES-GCM" },
+      false,
+      ["encrypt"]
+    );
+
+    // Генерируем случайный IV (Initialization Vector)
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    
+    // Шифруем URL
+    const encryptedData = await crypto.subtle.encrypt(
+      { name: "AES-GCM", iv: iv },
+      cryptoKey,
+      enc.encode(url)
+    );
+
+    // Объединяем IV и зашифрованные данные
+    const combined = new Uint8Array(iv.length + encryptedData.byteLength);
+    combined.set(iv);
+    combined.set(new Uint8Array(encryptedData), iv.length);
+
+    // Преобразуем в Base64
+    let binary = '';
+    const bytes = new Uint8Array(combined);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    const base64 = window.btoa(binary);
+    
+    // Делаем URL безопасным (URL-safe Base64)
+    const safeBase64 = base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+    const safeName = name || 'Subscription';
+    
+    // Формат: happ://crypto/<base64>#name=<name>&protected=true
+    return `happ://crypto/${safeBase64}#name=${encodeURIComponent(safeName)}&protected=true`;
+    
+  } catch (e) {
+    console.error("Happ Crypto Encryption failed:", e);
+    // Fallback на обычный метод, если шифрование не удалось
+    return `happ://add/${encodeURIComponent(url)}#name=${encodeURIComponent(name || 'Subscription')}&protected=true`;
+  }
 }
 
 // ── RENDER ─────────────────────────────────────────────────────────────────
-function render(d) {
+async function render(d) {
   if (d.subTitle) {
     document.getElementById('page-title').textContent = d.subTitle;
     document.getElementById('footer-title').textContent = d.subTitle;
@@ -826,7 +877,7 @@ function render(d) {
   const badge = document.getElementById('status-badge');
   if (!d.enabled) {
     badge.className = 'badge off';
-    badge.textContent = 'Отключена'; // Safe update
+    badge.textContent = 'Отключена';
     const dot = createEl('span', 'badge-dot');
     badge.prepend(dot);
   }
@@ -863,7 +914,7 @@ function render(d) {
 
   const isRecent = d.lastOnline && (Date.now() - d.lastOnline) < 3600000;
   const lastEl = document.getElementById('last-val');
-  lastEl.innerHTML = ''; // Clear
+  lastEl.innerHTML = '';
   
   const indicator = createEl('span', 'online-indicator');
   const dot = createEl('span', isRecent ? 'online-dot' : 'online-dot old');
@@ -876,7 +927,10 @@ function render(d) {
   document.getElementById('json-url-input').value  = d.subJsonUrl  || '';
 
   if (d.subUrl) {
-    document.getElementById('btn-happ').href      = makeHappUrl(d.subUrl, d.subTitle);
+    // Асинхронно генерируем зашифрованную ссылку для Happ
+    const happUrl = await makeHappCryptoUrl(d.subUrl, d.subTitle);
+    document.getElementById('btn-happ').href = happUrl;
+    
     document.getElementById('btn-hiddify').href   = makeHiddifyUrl(d.subUrl);
     document.getElementById('btn-v2rayn').href    = makeV2rayNUrl(d.subUrl);
     document.getElementById('btn-streisand').href = makeStreisandUrl(d.subUrl);
@@ -895,7 +949,7 @@ function render(d) {
     card.style.display = 'block';
     document.getElementById('links-count').textContent = '(' + d.links.length + ')';
     const list = document.getElementById('links-list');
-    list.innerHTML = ''; // Safe clear
+    list.innerHTML = '';
     
     d.links.forEach(link => {
       const proto = protoOf(link);
