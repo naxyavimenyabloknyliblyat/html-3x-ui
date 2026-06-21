@@ -42,3 +42,6 @@ When rendering the template, the following variables are injected into the templ
 * `{{ .links }}`: A list (slice) of string configurations (VMess, VLESS, etc. URLs). You can loop through them using `{{ range .links }} ... {{ end }}`.
 * `{{ .emails }}`: A list (slice) of emails related to the subscription.
 * `{{ .datepicker }}`: Current calendar format used by the panel (e.g. "gregorian" or "jalali").
+# a ready-made example
+<img width="1277" height="959" alt="image" src="https://github.com/user-attachments/assets/0ade5993-956a-491f-b619-cdcb22455a39" />
+
