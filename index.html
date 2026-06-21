@@ -45,175 +45,466 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
 
+  /* ── COSMIC BACKGROUND ── */
   .bg-canvas {
     position: fixed; inset: 0; z-index: 0; overflow: hidden;
     pointer-events: none;
     background: radial-gradient(ellipse at 20% 0%, #0a0a14 0%, #050507 50%, #000000 100%);
   }
+  
   .nebula {
-    position: absolute; border-radius: 50%;
-    filter: blur(120px); opacity: 0.4;
-    transition: transform 1.5s var(--ease); will-change: transform;
+    position: absolute; 
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.4;
+    transition: transform 1.5s var(--ease);
+    will-change: transform;
   }
-  .nebula-1 { width:1000px;height:1000px;top:-300px;left:50%;transform:translate(-50%,0);background:radial-gradient(circle,rgba(99,102,241,.25) 0%,transparent 70%); }
-  .nebula-2 { width:800px;height:800px;top:20%;right:-200px;background:radial-gradient(circle,rgba(236,72,153,.15) 0%,transparent 70%); }
-  .nebula-3 { width:700px;height:700px;bottom:-100px;left:-150px;background:radial-gradient(circle,rgba(16,185,129,.1) 0%,transparent 70%); }
-  #starfield { position:absolute;inset:0;width:100%;height:100%;transition:transform 1s var(--ease);will-change:transform; }
-  .noise-overlay { position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.02;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
-
-  .page { position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:80px 20px;gap:16px; }
-  .bento-grid { width:100%;max-width:1080px;display:grid;grid-template-columns:1fr;gap:16px; }
-
-  @media (min-width:880px) {
-    .bento-grid { grid-template-columns:repeat(3,1fr);grid-auto-rows:minmax(min-content,max-content); }
-    .card-status  { grid-column:span 2; }
-    .card-apps    { grid-column:span 1;grid-row:span 2; }
-    .card-formats { grid-column:span 2; }
-    .card-configs { grid-column:span 3; }
+  .nebula-1 {
+    width: 1000px; height: 1000px;
+    top: -300px; left: 50%;
+    transform: translate(-50%, 0);
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, transparent 70%);
+  }
+  .nebula-2 {
+    width: 800px; height: 800px;
+    top: 20%; right: -200px;
+    background: radial-gradient(circle, rgba(236, 72, 153, 0.15) 0%, transparent 70%);
+  }
+  .nebula-3 {
+    width: 700px; height: 700px;
+    bottom: -100px; left: -150px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
   }
 
-  .orbit-container { perspective:1200px;width:140px;height:140px;margin:0 auto 40px; }
-  .orbit-tilt { width:100%;height:100%;transform-style:preserve-3d;transform:rotateX(60deg) rotateZ(-15deg); }
-  .orbit-3d { width:100%;height:100%;position:relative;transform-style:preserve-3d;animation:rotate-orbit 12s linear infinite; }
-  .orbit-ring { position:absolute;inset:0;border:1px solid rgba(255,255,255,.15);border-radius:50%;box-shadow:0 0 20px rgba(99,102,241,.1); }
-  .orbit-ring.r1 { transform:rotateX(75deg) rotateY(0deg); }
-  .orbit-ring.r2 { transform:rotateX(75deg) rotateY(60deg); }
-  .orbit-ring.r3 { transform:rotateX(75deg) rotateY(120deg); }
-  .orbit-core { position:absolute;top:50%;left:50%;width:14px;height:14px;background:#fff;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 15px #fff,0 0 30px var(--accent),0 0 60px var(--accent);animation:core-pulse 2s ease-in-out infinite; }
-  .electron { position:absolute;width:8px;height:8px;background:var(--accent2);border-radius:50%;top:-4px;left:50%;margin-left:-4px;box-shadow:0 0 12px var(--accent2),0 0 24px var(--accent2); }
-  .e1 { transform:rotateY(0deg) translateZ(70px) rotateX(90deg); }
-  .e2 { transform:rotateY(120deg) translateZ(70px) rotateX(90deg); }
-  .e3 { transform:rotateY(240deg) translateZ(70px) rotateX(90deg); }
-  @media (min-width:880px) {
-    .orbit-container { width:160px;height:160px; }
-    .electron { width:10px;height:10px;top:-5px;margin-left:-5px; }
-    .e1 { transform:rotateY(0deg) translateZ(80px) rotateX(90deg); }
-    .e2 { transform:rotateY(120deg) translateZ(80px) rotateX(90deg); }
-    .e3 { transform:rotateY(240deg) translateZ(80px) rotateX(90deg); }
+  #starfield {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    transition: transform 1s var(--ease);
+    will-change: transform;
   }
-  @keyframes rotate-orbit { 0%{transform:rotateZ(0deg)} 100%{transform:rotateZ(360deg)} }
-  @keyframes core-pulse { 0%,100%{opacity:.9;transform:translate(-50%,-50%) scale(1)} 50%{opacity:1;transform:translate(-50%,-50%) scale(1.3)} }
+  
+  .noise-overlay {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    opacity: 0.02;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
 
-  .header { text-align:center;margin-bottom:32px;animation:fade-up 1s var(--ease) both; }
-  .header h1 { font-size:52px;font-weight:800;letter-spacing:-.04em;line-height:1;background:linear-gradient(180deg,#fff 0%,#a1a1aa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
-  .header p { font-size:14px;color:var(--muted);margin-top:16px;font-weight:500;letter-spacing:.02em; }
+  /* ── LAYOUT ── */
+  .page {
+    position: relative; z-index: 2;
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 80px 20px 80px;
+    gap: 16px;
+  }
 
-  .card { position:relative;background:var(--bg);border-radius:var(--radius);padding:1px;animation:fade-up 1s var(--ease) both;transition:transform .5s var(--ease); }
-  .card::before { content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.01));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none; }
-  .card-inner { background:rgba(8,8,12,.8);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-radius:calc(var(--radius) - 1px);padding:28px;height:100%;position:relative;overflow:hidden;box-shadow:0 30px 60px -30px rgba(0,0,0,.7); }
-  .card-inner::after { content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(600px circle at var(--mouse-x,50%) var(--mouse-y,50%),rgba(255,255,255,.03),transparent 40%);opacity:0;transition:opacity .5s var(--ease);pointer-events:none; }
-  .card:hover .card-inner::after { opacity:1; }
-  .card-status  { animation-delay:.1s; }
-  .card-apps    { animation-delay:.2s; }
-  .card-formats { animation-delay:.3s; }
-  .card-configs { animation-delay:.4s; }
-  @keyframes fade-up { from{opacity:0;transform:translateY(20px) scale(.99);filter:blur(5px)} to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)} }
+  .bento-grid {
+    width: 100%; max-width: 1080px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
 
-  .status-row { display:flex;align-items:center;justify-content:space-between;margin-bottom:32px; }
-  .badge { display:inline-flex;align-items:center;gap:8px;padding:5px 12px;border-radius:99px;font-size:11px;font-weight:600;background:var(--surface2);border:1px solid var(--border);text-transform:uppercase;letter-spacing:.05em; }
-  .badge.on  { background:rgba(16,185,129,.1);color:var(--green);border-color:rgba(16,185,129,.2); }
-  .badge.off { background:rgba(244,63,94,.1);color:var(--red);border-color:rgba(244,63,94,.2); }
+  @media (min-width: 880px) {
+    .bento-grid {
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: minmax(min-content, max-content);
+    }
+    .card-status { grid-column: span 2; }
+    .card-apps { grid-column: span 1; grid-row: span 2; }
+    .card-formats { grid-column: span 2; }
+    .card-configs { grid-column: span 3; }
+  }
+
+  /* ── 3D ATOMIC MODEL (Auto-Rotating) ── */
+  .orbit-container {
+    perspective: 1200px;
+    width: 140px; height: 140px;
+    margin: 0 auto 40px;
+  }
+  .orbit-tilt {
+    width: 100%; height: 100%;
+    transform-style: preserve-3d;
+    transform: rotateX(60deg) rotateZ(-15deg); /* Премиальный статичный ракурс */
+  }
+  .orbit-3d {
+    width: 100%; height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotate-orbit 12s linear infinite;
+  }
+  .orbit-ring {
+    position: absolute; inset: 0;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.1);
+  }
+  .orbit-ring.r1 { transform: rotateX(75deg) rotateY(0deg); }
+  .orbit-ring.r2 { transform: rotateX(75deg) rotateY(60deg); }
+  .orbit-ring.r3 { transform: rotateX(75deg) rotateY(120deg); }
+  
+  .orbit-core {
+    position: absolute; top: 50%; left: 50%;
+    width: 14px; height: 14px;
+    background: #fff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 15px #fff, 0 0 30px var(--accent), 0 0 60px var(--accent);
+    animation: core-pulse 2s ease-in-out infinite;
+  }
+  
+  .electron {
+    position: absolute;
+    width: 8px; height: 8px;
+    background: var(--accent2);
+    border-radius: 50%;
+    top: -4px; left: 50%;
+    margin-left: -4px;
+    box-shadow: 0 0 12px var(--accent2), 0 0 24px var(--accent2);
+  }
+  .e1 { transform: rotateY(0deg) translateZ(70px) rotateX(90deg); }
+  .e2 { transform: rotateY(120deg) translateZ(70px) rotateX(90deg); }
+  .e3 { transform: rotateY(240deg) translateZ(70px) rotateX(90deg); }
+
+  @media (min-width: 880px) {
+    .orbit-container {
+      width: 160px; height: 160px;
+    }
+    .electron {
+      width: 10px; height: 10px;
+      top: -5px; margin-left: -5px;
+    }
+    .e1 { transform: rotateY(0deg) translateZ(80px) rotateX(90deg); }
+    .e2 { transform: rotateY(120deg) translateZ(80px) rotateX(90deg); }
+    .e3 { transform: rotateY(240deg) translateZ(80px) rotateX(90deg); }
+  }
+
+  @keyframes rotate-orbit {
+    0% { transform: rotateZ(0deg); }
+    100% { transform: rotateZ(360deg); }
+  }
+  @keyframes core-pulse {
+    0%, 100% { opacity: 0.9; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.3); }
+  }
+
+  /* ── HEADER ── */
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+    animation: fade-up 1s var(--ease) both;
+  }
+  .header h1 {
+    font-size: 52px; font-weight: 800; letter-spacing: -0.04em; line-height: 1;
+    background: linear-gradient(180deg, #FFFFFF 0%, #A1A1AA 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .header p { font-size: 14px; color: var(--muted); margin-top: 16px; font-weight: 500; letter-spacing: 0.02em; }
+
+  /* ── CARDS (Premium Glassmorphism with Gradient Border) ── */
+  .card {
+    position: relative;
+    background: var(--bg);
+    border-radius: var(--radius);
+    padding: 1px;
+    animation: fade-up 1s var(--ease) both;
+    transition: transform .5s var(--ease);
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.01));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  
+  .card-inner {
+    background: rgba(8, 8, 12, 0.8);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-radius: calc(var(--radius) - 1px);
+    padding: 28px;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 30px 60px -30px rgba(0,0,0,0.7);
+  }
+
+  .card-inner::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255,255,255,0.03), transparent 40%);
+    opacity: 0;
+    transition: opacity .5s var(--ease);
+    pointer-events: none;
+  }
+  .card:hover .card-inner::after { opacity: 1; }
+
+  .card-status { animation-delay: .1s; }
+  .card-apps { animation-delay: .2s; }
+  .card-formats { animation-delay: .3s; }
+  .card-configs { animation-delay: .4s; }
+
+  @keyframes fade-up {
+    from { opacity:0; transform:translateY(20px) scale(0.99); filter: blur(5px); }
+    to   { opacity:1; transform:translateY(0) scale(1); filter: blur(0); }
+  }
+
+  /* ── STATUS ROW ── */
+  .status-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 32px;
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 12px; border-radius: 99px; font-size: 11px; font-weight: 600;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .badge.on  { background: rgba(16,185,129,.1); color: var(--green); border-color: rgba(16,185,129,0.2); }
+  .badge.off { background: rgba(244,63,94,.1); color: var(--red); border-color: rgba(244,63,94,0.2); }
   .badge-dot { width:6px;height:6px;border-radius:50%; }
-  .badge.on .badge-dot  { background:var(--green);animation:pulse-dot 2s infinite;box-shadow:0 0 6px var(--green); }
-  .badge.off .badge-dot { background:var(--red); }
-  @keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
-  .sid-text { font-size:12px;color:var(--muted);font-family:'SF Mono',monospace;font-weight:500; }
-
-  .traffic-section { margin-bottom:28px; }
-  .traffic-label-row { display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px; }
-  .traffic-label-row span:first-child { font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em; }
-  .traffic-pct { font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.03em;color:var(--text); }
-  .bar-track { height:6px;background:var(--surface2);border-radius:99px;overflow:hidden;border:1px solid var(--border); }
-  .bar-fill { height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 1.5s var(--ease);position:relative;box-shadow:0 0 10px rgba(99,102,241,.4); }
-  .bar-fill::after { content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);animation:shimmer 2s infinite; }
-  @keyframes shimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
-  .bar-fill.warn { background:linear-gradient(90deg,var(--amber),#ff7b00);box-shadow:0 0 10px rgba(245,159,0,.4); }
-  .bar-fill.crit { background:linear-gradient(90deg,var(--red),#c92a2a);box-shadow:0 0 10px rgba(244,63,94,.4); }
-
-  .stats-grid { display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:20px; }
-  .stat-box { background:var(--surface2);border-radius:12px;padding:14px;border:1px solid var(--border);transition:transform .3s var(--ease),background .3s var(--ease); }
-  .stat-box:hover { transform:translateY(-2px);background:rgba(255,255,255,.05); }
-  .stat-val { font-size:18px;font-weight:600;color:var(--text);font-variant-numeric:tabular-nums;letter-spacing:-.02em; }
-  .stat-lbl { font-size:10px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.06em;font-weight:500; }
-
-  .divider { height:1px;background:var(--border);margin:24px 0; }
-  .meta-row { display:flex;align-items:center;justify-content:space-between;padding:8px 0;font-size:14px; }
-  .meta-key { display:flex;align-items:center;gap:10px;color:var(--muted);font-weight:500;font-size:13px; }
-  .meta-key svg { width:14px;height:14px;flex-shrink:0;stroke:var(--text);opacity:.4; }
-  .meta-val { font-weight:500;color:var(--text);font-variant-numeric:tabular-nums;font-size:13px; }
-  .meta-val.warn { color:var(--amber); }
-  .meta-val.crit { color:var(--red); }
-  .online-indicator { display:flex;align-items:center;gap:8px; }
-  .online-dot { width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse-dot 2s infinite;box-shadow:0 0 6px var(--green); }
-  .online-dot.old { background:var(--faint);animation:none;box-shadow:none; }
-
-  .section-label { font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600;margin-bottom:16px;display:flex;align-items:center;gap:8px; }
-  .section-label::after { content:'';flex:1;height:1px;background:var(--border); }
-
-  .app-grid { display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px; }
-  .app-btn { display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px 8px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;cursor:pointer;text-decoration:none;transition:all .3s var(--ease);color:var(--text); }
-  .app-btn:hover { background:rgba(255,255,255,.05);border-color:var(--border2);transform:translateY(-2px); }
-  .app-btn:active { transform:scale(.98); }
-  .app-icon { width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center; }
-  .app-icon svg { width:18px;height:18px; }
-  .app-icon.blue   { background:rgba(28,126,214,.1);color:#74c0fc; }
-  .app-icon.purple { background:rgba(112,72,232,.1);color:#b197fc; }
-  .app-icon.green  { background:rgba(12,166,120,.1);color:#63e6be; }
-  .app-icon.amber  { background:rgba(240,140,0,.1);color:#ffe066; }
-
-  .app-btn-featured { display:flex;flex-direction:row;align-items:center;gap:12px;padding:14px 16px;width:100%;border:1px solid transparent;background:linear-gradient(135deg,rgba(99,102,241,.2),rgba(236,72,153,.1));color:#fff;position:relative;overflow:hidden;margin-bottom:12px;border-radius:12px;text-decoration:none;transition:all .3s var(--ease);cursor:pointer; }
-  .app-btn-featured::before { content:'';position:absolute;inset:0;border-radius:12px;padding:1px;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none; }
-  .app-btn-featured:hover { transform:translateY(-2px);box-shadow:0 10px 30px rgba(99,102,241,.2); }
-  .app-btn-featured:disabled { opacity:.7;cursor:not-allowed;transform:none; }
-  .app-btn-featured .app-content { flex:1;text-align:left; }
-  .app-btn-featured .app-title-row { display:flex;align-items:center;gap:8px;margin-bottom:2px; }
-  .app-btn-featured .app-name { font-size:14px;font-weight:600;color:#fff; }
-  .app-btn-featured .app-sub { font-size:11px;color:var(--muted);font-weight:500; }
-  .app-btn-featured .app-arrow { width:16px;height:16px;color:var(--muted);flex-shrink:0;transition:transform .3s var(--ease); }
-  .app-btn-featured:hover .app-arrow { transform:translateX(4px);color:var(--text); }
-  .app-recommend-badge { background:var(--text);color:#000;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.03em;transition:background .3s,color .3s; }
-  .app-recommend-badge.loading { background:var(--accent);color:#fff; }
-  .app-recommend-badge.success { background:var(--green);color:#fff; }
-  .app-recommend-badge.error   { background:var(--red);color:#fff; }
-
-  .app-name { font-size:12px;font-weight:500;color:var(--text); }
-  .app-sub  { font-size:10px;color:var(--muted);margin-top:-2px;font-weight:400; }
-
-  .copy-input-wrap { display:flex;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:4px 4px 4px 12px;align-items:center;transition:border-color .3s var(--ease),background .3s var(--ease); }
-  .copy-input-wrap:focus-within { background:rgba(0,0,0,.3);border-color:var(--accent); }
-  .copy-input-wrap input { flex:1;background:none;border:none;outline:none;font-size:12px;color:var(--text);font-family:'SF Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:8px 0; }
-  .copy-input-wrap input::placeholder { color:var(--faint); }
-  .copy-btn { background:var(--text);border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;color:#000;cursor:pointer;white-space:nowrap;transition:all .3s var(--ease);flex-shrink:0; }
-  .copy-btn:hover { opacity:.8;transform:translateY(-1px); }
-  .copy-btn:active { transform:scale(.95); }
-  .copy-btn.copied { background:var(--green);color:#fff; }
-
-  .links-list { display:flex;flex-direction:column;gap:8px; }
-  .link-row { display:flex;align-items:center;justify-content:space-between;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px 14px;gap:12px;transition:all .3s var(--ease); }
-  .link-row:hover { background:rgba(255,255,255,.04);border-color:var(--border2); }
-  .link-info { overflow:hidden; }
-  .link-proto { font-size:9px;font-weight:600;letter-spacing:.03em;padding:2px 6px;border-radius:4px;display:inline-block;margin-bottom:4px;text-transform:uppercase;border:1px solid currentColor; }
-  .link-proto.vless     { color:#74c0fc; }
-  .link-proto.vmess     { color:#b197fc; }
-  .link-proto.hysteria2 { color:#63e6be; }
-  .link-proto.trojan    { color:#ffe066; }
-  .link-proto.ss        { color:#ffa8a8; }
-  .link-name { font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px; }
-  .link-host { font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;font-family:'SF Mono',monospace;margin-top:2px; }
-  .link-copy-btn { background:transparent;border:1px solid var(--border2);border-radius:8px;padding:6px 12px;font-size:11px;font-weight:500;color:var(--text);cursor:pointer;flex-shrink:0;transition:all .3s var(--ease); }
-  .link-copy-btn:hover { background:var(--text);color:#000;border-color:var(--text); }
-  .link-copy-btn.copied { background:var(--green);color:#fff;border-color:var(--green); }
-
-  .footer { font-size:12px;color:var(--muted);text-align:center;animation:fade-up 1s .5s var(--ease) both;padding-top:40px; }
-  .footer a { color:var(--text);text-decoration:none;transition:color .3s;border-bottom:1px solid transparent; }
-  .footer a:hover { color:var(--accent);border-bottom-color:var(--accent); }
-
-  @media (prefers-reduced-motion:reduce) {
-    *,*::before,*::after { animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important; }
-    .orbit-3d { animation:none; }
+  .badge.on  .badge-dot { background: var(--green); animation: pulse-dot 2s infinite; box-shadow: 0 0 6px var(--green); }
+  .badge.off .badge-dot { background: var(--red); }
+  @keyframes pulse-dot {
+    0%,100% { opacity:1; transform: scale(1); }
+    50%     { opacity:.5; transform: scale(1.4); }
   }
-  a:focus-visible,button:focus-visible,input:focus-visible { outline:2px solid var(--accent);outline-offset:2px; }
-  @media (max-width:880px) { .header h1{font-size:40px} .card-inner{padding:24px 20px} }
+  .sid-text { font-size: 12px; color: var(--muted); font-family: 'SF Mono', monospace; font-weight: 500; }
+
+  /* ── TRAFFIC BAR ── */
+  .traffic-section { margin-bottom: 28px; }
+  .traffic-label-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 12px;
+  }
+  .traffic-label-row span:first-child { font-size: 12px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .05em; }
+  .traffic-pct { font-size: 28px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.03em; color: var(--text); }
+  .bar-track {
+    height: 6px; background: var(--surface2);
+    border-radius: 99px; overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .bar-fill {
+    height: 100%; border-radius: 99px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 1.5s var(--ease);
+    position: relative;
+    box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+  }
+  .bar-fill::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: shimmer 2s infinite;
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  .bar-fill.warn { background: linear-gradient(90deg, var(--amber), #ff7b00); box-shadow: 0 0 10px rgba(245, 159, 0, 0.4); }
+  .bar-fill.crit { background: linear-gradient(90deg, var(--red), #c92a2a); box-shadow: 0 0 10px rgba(244, 63, 94, 0.4); }
+
+  /* ── STATS GRID ── */
+  .stats-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 20px;
+  }
+  .stat-box {
+    background: var(--surface2); border-radius: 12px;
+    padding: 14px; 
+    border: 1px solid var(--border);
+    transition: transform .3s var(--ease), background .3s var(--ease);
+  }
+  .stat-box:hover { transform: translateY(-2px); background: rgba(255,255,255,0.05); }
+  .stat-val { font-size: 18px; font-weight: 600; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+  .stat-lbl { font-size: 10px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: .06em; font-weight: 500; }
+
+  /* ── META ROWS ── */
+  .divider { height: 1px; background: var(--border); margin: 24px 0; }
+  .meta-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 0; font-size: 14px;
+  }
+  .meta-key { display: flex; align-items: center; gap: 10px; color: var(--muted); font-weight: 500; font-size: 13px; }
+  .meta-key svg { width:14px;height:14px;flex-shrink:0; stroke: var(--text); opacity: 0.4; }
+  .meta-val { font-weight: 500; color: var(--text); font-variant-numeric: tabular-nums; font-size: 13px; }
+  .meta-val.warn { color: var(--amber); }
+  .meta-val.crit { color: var(--red); }
+  .online-indicator { display:flex; align-items:center; gap:8px; }
+  .online-dot { width:6px;height:6px;border-radius:50%;background:var(--green); animation:pulse-dot 2s infinite; box-shadow: 0 0 6px var(--green); }
+  .online-dot.old { background:var(--faint);animation:none; box-shadow:none; }
+
+  /* ── APP BUTTONS ── */
+  .section-label {
+    font-size: 11px; color: var(--muted); text-transform: uppercase;
+    letter-spacing: .08em; font-weight: 600; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+  .app-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .app-btn {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 8px; padding: 16px 8px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 12px; cursor: pointer; text-decoration: none;
+    transition: all .3s var(--ease);
+    color: var(--text);
+  }
+  .app-btn:hover { background: rgba(255,255,255,0.05); border-color: var(--border2); transform: translateY(-2px); }
+  .app-btn:active { transform: scale(.98); }
+  .app-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .app-icon svg { width:18px;height:18px; }
+  .app-icon.blue   { background: rgba(28,126,214,.1); color: #74c0fc; }
+  .app-icon.purple { background: rgba(112,72,232,.1); color: #b197fc; }
+  .app-icon.green  { background: rgba(12,166,120,.1); color: #63e6be; }
+  .app-icon.amber  { background: rgba(240,140,0,.1); color: #ffe066; }
+  
+  .app-btn-featured {
+    display: flex; flex-direction: row; align-items: center; gap: 12px;
+    padding: 14px 16px; width: 100%;
+    border: 1px solid transparent;
+    background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(236,72,153,0.1));
+    color: #fff;
+    position: relative; overflow: hidden;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all .3s var(--ease);
+  }
+  .app-btn-featured::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+  .app-btn-featured:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
+  }
+  .app-btn-featured .app-content { flex: 1; text-align: left; }
+  .app-btn-featured .app-title-row { display: flex; align-items: center; gap: 8px; margin-bottom: 2px; }
+  .app-btn-featured .app-name { font-size: 14px; font-weight: 600; color: #fff; }
+  .app-btn-featured .app-sub { font-size: 11px; color: var(--muted); font-weight: 500; }
+  .app-btn-featured .app-arrow { width: 16px; height: 16px; color: var(--muted); flex-shrink: 0; transition: transform .3s var(--ease); }
+  .app-btn-featured:hover .app-arrow { transform: translateX(4px); color: var(--text); }
+  .app-recommend-badge {
+    background: var(--text); color: #000; 
+    font-size: 9px; font-weight: 700; padding: 2px 6px;
+    border-radius: 4px; 
+    text-transform: uppercase; letter-spacing: .03em;
+  }
+  
+  .app-name { font-size: 12px; font-weight: 500; color: var(--text); }
+  .app-sub  { font-size: 10px; color: var(--muted); margin-top: -2px; font-weight: 400; }
+
+  /* ── COPY ROW ── */
+  .copy-input-wrap {
+    display: flex; gap: 6px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 4px 4px 4px 12px;
+    align-items: center;
+    transition: border-color .3s var(--ease), background .3s var(--ease);
+  }
+  .copy-input-wrap:focus-within { background: rgba(0,0,0,0.3); border-color: var(--accent); }
+  .copy-input-wrap input {
+    flex: 1; background: none; border: none; outline: none;
+    font-size: 12px; color: var(--text); font-family: 'SF Mono', monospace;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    padding: 8px 0;
+  }
+  .copy-input-wrap input::placeholder { color: var(--faint); }
+  .copy-btn {
+    background: var(--text);
+    border: none; border-radius: 8px;
+    padding: 8px 14px; font-size: 12px; font-weight: 600; color: #000;
+    cursor: pointer; white-space: nowrap; transition: all .3s var(--ease);
+    flex-shrink: 0;
+  }
+  .copy-btn:hover { opacity: .8; transform: translateY(-1px); }
+  .copy-btn:active { transform: scale(.95); }
+  .copy-btn.copied { background: var(--green); color: #fff; }
+
+  /* ── LINKS LIST ── */
+  .links-list { display: flex; flex-direction: column; gap: 8px; }
+  .link-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 12px; padding: 12px 14px; gap: 12px;
+    transition: all .3s var(--ease);
+  }
+  .link-row:hover { background: rgba(255,255,255,0.04); border-color: var(--border2); }
+  .link-info { overflow: hidden; }
+  .link-proto {
+    font-size: 9px; font-weight: 600; letter-spacing: .03em;
+    padding: 2px 6px; border-radius: 4px; display: inline-block; margin-bottom: 4px;
+    text-transform: uppercase;
+    border: 1px solid currentColor;
+  }
+  .link-proto.vless    { color:#74c0fc; }
+  .link-proto.vmess    { color:#b197fc; }
+  .link-proto.hysteria2{ color:#63e6be; }
+  .link-proto.trojan   { color:#ffe066; }
+  .link-proto.ss       { color:#ffa8a8; }
+  .link-name { font-size: 13px; font-weight: 500; color: var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:220px; }
+  .link-host { font-size: 11px; color: var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:220px; font-family: 'SF Mono', monospace; margin-top: 2px; }
+  .link-copy-btn {
+    background: transparent; border: 1px solid var(--border2);
+    border-radius: 8px; padding: 6px 12px; font-size: 11px; font-weight: 500;
+    color: var(--text); cursor: pointer; flex-shrink: 0;
+    transition: all .3s var(--ease);
+  }
+  .link-copy-btn:hover { background: var(--text); color: #000; border-color: var(--text); }
+  .link-copy-btn.copied { background: var(--green); color: #fff; border-color: var(--green); }
+
+  /* ── FOOTER ── */
+  .footer {
+    font-size: 12px; color: var(--muted); text-align: center;
+    animation: fade-up 1s .5s var(--ease) both;
+    padding-top: 40px;
+  }
+  .footer a { color: var(--text); text-decoration: none; transition: color .3s; border-bottom: 1px solid transparent; }
+  .footer a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── ACCESSIBILITY & OPTIMIZATION ── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .orbit-3d { animation: none; }
+  }
+
+  a:focus-visible, button:focus-visible, input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 880px) {
+    .header h1 { font-size: 40px; }
+    .card-inner { padding: 24px 20px; }
+  }
 </style>
 </head>
 <body>
@@ -227,6 +518,7 @@
 <div class="noise-overlay" aria-hidden="true"></div>
 
 <div class="page">
+
   <header class="header">
     <div class="orbit-container" aria-hidden="true">
       <div class="orbit-tilt">
@@ -243,13 +535,17 @@
   </header>
 
   <main class="bento-grid">
-
-    <article class="card card-status" onmousemove="handleMouseMove(event,this)">
+    
+    <article class="card card-status" onmousemove="handleMouseMove(event, this)">
       <div class="card-inner">
         <div class="status-row">
-          <span class="badge on" id="status-badge" role="status"><span class="badge-dot"></span>Активна</span>
+          <span class="badge on" id="status-badge" role="status">
+            <span class="badge-dot"></span>
+            Активна
+          </span>
           <span class="sid-text" id="sid-text">—</span>
         </div>
+
         <div class="traffic-section">
           <div class="traffic-label-row">
             <span>Трафик</span>
@@ -259,37 +555,61 @@
             <div class="bar-fill" id="bar-fill" style="width:0%"></div>
           </div>
         </div>
+
         <div class="stats-grid">
-          <div class="stat-box"><div class="stat-val" id="used-val">—</div><div class="stat-lbl">Использовано</div></div>
-          <div class="stat-box"><div class="stat-val" id="remain-val">—</div><div class="stat-lbl">Осталось</div></div>
-          <div class="stat-box"><div class="stat-val" id="total-val">—</div><div class="stat-lbl">Всего</div></div>
+          <div class="stat-box">
+            <div class="stat-val" id="used-val">—</div>
+            <div class="stat-lbl">Использовано</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val" id="remain-val">—</div>
+            <div class="stat-lbl">Осталось</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-val" id="total-val">—</div>
+            <div class="stat-lbl">Всего</div>
+          </div>
         </div>
+
         <div class="divider"></div>
+
         <div class="meta-row">
-          <span class="meta-key"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Истекает</span>
+          <span class="meta-key">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Истекает
+          </span>
           <span class="meta-val" id="expire-val">—</span>
         </div>
         <div class="meta-row">
-          <span class="meta-key"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>Последний вход</span>
+          <span class="meta-key">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><circle cx="12" cy="20" r="1" fill="currentColor"/></svg>
+            Последний вход
+          </span>
           <span class="meta-val" id="last-val">—</span>
         </div>
         <div class="meta-row">
-          <span class="meta-key"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="7 16 12 21 17 16"/><path d="M12 21V3"/></svg>Скачано</span>
+          <span class="meta-key">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="7 16 12 21 17 16"/><path d="M12 21V3"/></svg>
+            Скачано
+          </span>
           <span class="meta-val" id="dl-val">—</span>
         </div>
         <div class="meta-row">
-          <span class="meta-key"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="17 8 12 3 7 8"/><path d="M12 3v18"/></svg>Загружено</span>
+          <span class="meta-key">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="17 8 12 3 7 8"/><path d="M12 3v18"/></svg>
+            Загружено
+          </span>
           <span class="meta-val" id="ul-val">—</span>
         </div>
       </div>
     </article>
 
-    <article class="card card-apps" onmousemove="handleMouseMove(event,this)">
+    <article class="card card-apps" onmousemove="handleMouseMove(event, this)">
       <div class="card-inner">
         <div class="section-label">Подключить</div>
 
-        <button type="button" class="app-btn-featured" id="btn-happ">
-          <div class="app-icon" style="background:rgba(255,255,255,.1);flex-shrink:0;width:36px;height:36px;">
+        <a class="app-btn-featured" id="btn-happ" href="#" target="_blank" rel="noopener noreferrer">
+          <div class="app-icon" style="background: rgba(255, 255, 255, 0.1); flex-shrink:0; width:36px; height:36px;">
             <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:18px;height:18px">
               <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
               <path d="M8 12h8M12 8l4 4-4 4"/>
@@ -298,56 +618,68 @@
           <div class="app-content">
             <div class="app-title-row">
               <span class="app-name">Happ</span>
-              <span class="app-recommend-badge" id="happ-badge">Защищено</span>
+              <span class="app-recommend-badge">Защищено</span>
             </div>
-            <span class="app-sub" id="happ-sub">Зашифрованная автоподписка</span>
+            <span class="app-sub">Зашифрованная автоподписка</span>
           </div>
           <svg class="app-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </button>
+        </a>
 
         <div class="app-grid">
           <a class="app-btn" id="btn-hiddify" href="#" target="_blank" rel="noopener noreferrer">
-            <div class="app-icon blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10A15 15 0 0 1 8 12a15 15 0 0 1 4-10z"/><path d="M2 12h20"/></svg></div>
-            <span class="app-name">Hiddify</span><span class="app-sub">iOS / Android / PC</span>
+            <div class="app-icon blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 2a15 15 0 0 1 4 10 15 15 0 0 1-4 10A15 15 0 0 1 8 12a15 15 0 0 1 4-10z"/><path d="M2 12h20"/></svg>
+            </div>
+            <span class="app-name">Hiddify</span>
+            <span class="app-sub">iOS / Android / PC</span>
           </a>
           <a class="app-btn" id="btn-v2rayn" href="#" target="_blank" rel="noopener noreferrer">
-            <div class="app-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
-            <span class="app-name">v2rayN</span><span class="app-sub">Windows / Linux</span>
+            <div class="app-icon purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            </div>
+            <span class="app-name">v2rayN</span>
+            <span class="app-sub">Windows / Linux</span>
           </a>
           <a class="app-btn" id="btn-clash" href="#" target="_blank" rel="noopener noreferrer">
-            <div class="app-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
-            <span class="app-name">Mihomo</span><span class="app-sub">Все платформы</span>
+            <div class="app-icon green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            </div>
+            <span class="app-name">Mihomo</span>
+            <span class="app-sub">Все платформы</span>
           </a>
           <a class="app-btn" id="btn-streisand" href="#" target="_blank" rel="noopener noreferrer">
-            <div class="app-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg></div>
-            <span class="app-name">Streisand</span><span class="app-sub">iOS / macOS</span>
+            <div class="app-icon amber">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+            </div>
+            <span class="app-name">Streisand</span>
+            <span class="app-sub">iOS / macOS</span>
           </a>
         </div>
 
         <div class="copy-input-wrap">
-          <input type="text" id="sub-url-input" readonly placeholder="Ссылка подписки..." aria-label="Ссылка подписки"/>
+          <input type="text" id="sub-url-input" readonly placeholder="Ссылка подписки..." aria-label="Ссылка подписки" />
           <button type="button" class="copy-btn" id="copy-sub-btn" onclick="copyUrl('sub-url-input','copy-sub-btn')">Копировать</button>
         </div>
       </div>
     </article>
 
-    <article class="card card-formats" onmousemove="handleMouseMove(event,this)">
+    <article class="card card-formats" onmousemove="handleMouseMove(event, this)">
       <div class="card-inner">
         <div class="section-label">Дополнительные форматы</div>
         <div style="display:flex;flex-direction:column;gap:8px;">
           <div class="copy-input-wrap">
-            <input type="text" id="clash-url-input" readonly placeholder="Clash / Mihomo URL..." aria-label="Clash URL"/>
+            <input type="text" id="clash-url-input" readonly placeholder="Clash / Mihomo URL..." aria-label="Clash URL" />
             <button type="button" class="copy-btn" onclick="copyUrl('clash-url-input',this)">Clash</button>
           </div>
           <div class="copy-input-wrap">
-            <input type="text" id="json-url-input" readonly placeholder="JSON конфиг..." aria-label="JSON URL"/>
+            <input type="text" id="json-url-input" readonly placeholder="JSON конфиг..." aria-label="JSON URL" />
             <button type="button" class="copy-btn" onclick="copyUrl('json-url-input',this)">JSON</button>
           </div>
         </div>
       </div>
     </article>
 
-    <article class="card card-configs" id="links-card" style="display:none" onmousemove="handleMouseMove(event,this)">
+    <article class="card card-configs" id="links-card" style="display:none" onmousemove="handleMouseMove(event, this)">
       <div class="card-inner">
         <div class="section-label">Конфигурации <span id="links-count" style="font-weight:400;color:var(--faint)"></span></div>
         <div class="links-list" id="links-list"></div>
@@ -356,61 +688,100 @@
 
   </main>
 
-  <footer class="footer">
+  <footer class="footer" id="footer-el">
     &copy; <span id="footer-title">zapretcore</span>
     <span id="support-span" style="display:none"> &mdash; <a id="support-link" href="#" rel="noopener noreferrer">Поддержка</a></span>
   </footer>
+
 </div>
 
 <script>
-// ── STARFIELD ──────────────────────────────────────────────────────────────
+// ── PREMIUM STARFIELD (Optimized) ──────────────────────────────────────────
 const canvas = document.getElementById('starfield');
 const ctx = canvas.getContext('2d');
 let stars = [];
-const dpr = Math.min(window.devicePixelRatio || 1, 2);
+let dpr = Math.min(window.devicePixelRatio || 1, 2); // Cap DPR for performance
 
 function resizeStarfield() {
-  canvas.width  = window.innerWidth * dpr;
+  canvas.width = window.innerWidth * dpr;
   canvas.height = window.innerHeight * dpr;
-  canvas.style.width  = window.innerWidth + 'px';
+  canvas.style.width = window.innerWidth + 'px';
   canvas.style.height = window.innerHeight + 'px';
   ctx.scale(dpr, dpr);
+  
   stars = [];
-  const n = Math.floor(window.innerWidth * window.innerHeight / 4000);
-  for (let i = 0; i < n; i++) stars.push({ x:Math.random()*window.innerWidth, y:Math.random()*window.innerHeight, z:Math.random()*.8+.2, r:Math.random()*1.5, tw:Math.random()*Math.PI*2, tw_speed:Math.random()*.02+.005 });
+  const numStars = Math.floor((window.innerWidth * window.innerHeight) / 4000);
+  for(let i=0; i<numStars; i++) {
+    stars.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      z: Math.random() * 0.8 + 0.2,
+      r: Math.random() * 1.5,
+      tw: Math.random() * Math.PI * 2,
+      tw_speed: Math.random() * 0.02 + 0.005
+    });
+  }
 }
+
 function drawStarfield() {
   ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-  stars.forEach((s, i) => {
+  for(let i=0; i<stars.length; i++) {
+    const s = stars[i];
     s.tw += s.tw_speed;
-    const op = (Math.sin(s.tw) * .5 + .5) * s.z;
-    ctx.beginPath(); ctx.arc(s.x, s.y, Math.max(.1, s.r*s.z), 0, Math.PI*2);
-    ctx.fillStyle = i%90===0 ? `rgba(99,102,241,${op*.8})` : i%140===0 ? `rgba(236,72,153,${op*.8})` : `rgba(255,255,255,${op})`;
+    const opacity = (Math.sin(s.tw) * 0.5 + 0.5) * s.z;
+    
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, Math.max(0.1, s.r * s.z), 0, Math.PI * 2);
+    
+    if (i % 90 === 0) ctx.fillStyle = `rgba(99, 102, 241, ${opacity * 0.8})`;
+    else if (i % 140 === 0) ctx.fillStyle = `rgba(236, 72, 153, ${opacity * 0.8})`;
+    else ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+    
     ctx.fill();
-    if (s.r > 1.2) { ctx.beginPath(); ctx.arc(s.x,s.y,s.r*s.z*2,0,Math.PI*2); ctx.fillStyle=`rgba(255,255,255,${op*.1})`; ctx.fill(); }
-  });
+    
+    if (s.r > 1.2) {
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r * s.z * 2, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${opacity * 0.1})`;
+      ctx.fill();
+    }
+  }
   requestAnimationFrame(drawStarfield);
 }
-window.addEventListener('resize', resizeStarfield);
-resizeStarfield(); drawStarfield();
 
-// ── PARALLAX ──────────────────────────────────────────────────────────────
-const [n1,n2,n3,sf] = ['n1','n2','n3','starfield'].map(id=>document.getElementById(id));
-document.addEventListener('mousemove', e => {
-  const x=(e.clientX/window.innerWidth-.5)*2, y=(e.clientY/window.innerHeight-.5)*2;
-  n1.style.transform=`translate(${-50+x*2}%,${y*2}%)`;
-  n2.style.transform=`translate(${x*3}%,${y*3}%)`;
-  n3.style.transform=`translate(${x*4}%,${y*4}%)`;
-  sf.style.transform=`translate(${x}%,${y}%)`;
+window.addEventListener('resize', resizeStarfield);
+resizeStarfield();
+drawStarfield();
+
+// ── MOUSE PARALLAX BACKGROUND (Только для туманностей и звезд) ──────────────
+const n1 = document.getElementById('n1');
+const n2 = document.getElementById('n2');
+const n3 = document.getElementById('n3');
+const starfield = document.getElementById('starfield');
+
+document.addEventListener('mousemove', (e) => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 2;
+  const y = (e.clientY / window.innerHeight - 0.5) * 2;
+  
+  n1.style.transform = `translate(${-50 + x * 2}%, ${y * 2}%)`;
+  n2.style.transform = `translate(${x * 3}%, ${y * 3}%)`;
+  n3.style.transform = `translate(${x * 4}%, ${y * 4}%)`;
+  starfield.style.transform = `translate(${x * 1}%, ${y * 1}%)`;
 });
 
-// ── CARD GLOW ─────────────────────────────────────────────────────────────
-function handleMouseMove(e, el) {
-  const r=el.getBoundingClientRect(), inner=el.querySelector('.card-inner');
-  if (inner) { inner.style.setProperty('--mouse-x',`${e.clientX-r.left}px`); inner.style.setProperty('--mouse-y',`${e.clientY-r.top}px`); }
+// ── CARD HOVER GLOW EFFECT ─────────────────────────────────────────────────
+function handleMouseMove(e, element) {
+  const rect = element.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const innerCard = element.querySelector('.card-inner');
+  if (innerCard) {
+    innerCard.style.setProperty('--mouse-x', `${x}px`);
+    innerCard.style.setProperty('--mouse-y', `${y}px`);
+  }
 }
 
-// ── DATA ───────────────────────────────────────────────────────────────────
+// ── DATA & LOGIC ───────────────────────────────────────────────────────────
 const D = {
   sId:          "{{ .sId }}",
   enabled:      {{ .enabled }},
@@ -433,109 +804,115 @@ const D = {
 };
 
 // ── HELPERS ────────────────────────────────────────────────────────────────
-const fmtDate = ts => !ts ? 'Без ограничений' : new Date(ts*1000).toLocaleDateString('ru-RU',{day:'numeric',month:'long',year:'numeric'});
-const fmtAgo  = ms => { if (!ms) return 'Нет данных'; const d=Date.now()-ms; if(d<60000)return'Только что'; if(d<3600000)return Math.floor(d/60000)+' мин назад'; if(d<86400000)return Math.floor(d/3600000)+' ч назад'; return new Date(ms).toLocaleDateString('ru-RU',{day:'numeric',month:'short'}); };
-const protoOf = l => { const m=l.match(/^([a-z0-9]+):\/\//); return m?m[1]:'?'; };
-const nameOf  = l => { const t=l.match(/#(.+)$/); return t?decodeURIComponent(t[1]):l.substring(0,36); };
-const hostOf  = l => { const h=l.match(/@([^/?#@]+)/); return h?h[1]:''; };
-const mkEl    = (tag,cls,txt) => { const e=document.createElement(tag); if(cls)e.className=cls; if(txt)e.textContent=txt; return e; };
+function fmtDate(ts) {
+  if (!ts) return 'Без ограничений';
+  return new Date(ts * 1000).toLocaleDateString('ru-RU', {day:'numeric',month:'long',year:'numeric'});
+}
+function fmtAgo(ms) {
+  if (!ms) return 'Нет данных';
+  const d = Date.now() - ms;
+  if (d < 60000)    return 'Только что';
+  if (d < 3600000)  return Math.floor(d/60000) + ' мин назад';
+  if (d < 86400000) return Math.floor(d/3600000) + ' ч назад';
+  return new Date(ms).toLocaleDateString('ru-RU',{day:'numeric',month:'short'});
+}
+function protoOf(link) {
+  const m = link.match(/^([a-z0-9]+):\/\//);
+  return m ? m[1] : '?';
+}
+function nameOf(link) {
+  const t = link.match(/#(.+)$/);
+  return t ? decodeURIComponent(t[1]) : link.substring(0,36);
+}
+function hostOf(link) {
+  const h = link.match(/@([^/?#@]+)/);
+  return h ? h[1] : '';
+}
 
+// ── SECURE DOM BUILDER ─────────────────────────────────────────────────────
+function createEl(tag, classes, text) {
+  const el = document.createElement(tag);
+  if (classes) el.className = classes;
+  if (text) el.textContent = text;
+  return el;
+}
+
+// ── COPY ───────────────────────────────────────────────────────────────────
 function copyUrl(inputId, btnEl) {
-  const inp=document.getElementById(inputId), btn=typeof btnEl==='string'?document.getElementById(btnEl):btnEl;
-  if (!inp||!inp.value) return;
-  navigator.clipboard.writeText(inp.value).then(()=>{ const o=btn.textContent; btn.textContent='✓ Скопировано'; btn.classList.add('copied'); setTimeout(()=>{ btn.textContent=o; btn.classList.remove('copied'); },2000); });
+  const inp = document.getElementById(inputId);
+  const btn = typeof btnEl === 'string' ? document.getElementById(btnEl) : btnEl;
+  if (!inp || !inp.value) return;
+  navigator.clipboard.writeText(inp.value).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Скопировано';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+  });
 }
 function copyText(text, btn) {
-  navigator.clipboard.writeText(text).then(()=>{ const o=btn.textContent; btn.textContent='✓'; btn.classList.add('copied'); setTimeout(()=>{ btn.textContent=o; btn.classList.remove('copied'); },2000); });
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 2000);
+  });
 }
 
-// ── DEEPLINKS ─────────────────────────────────────────────────────────────
-const makeHiddifyUrl   = s => 'hiddify://import/'          + encodeURIComponent(s);
-const makeV2rayNUrl    = s => 'v2rayn://sub?url='          + encodeURIComponent(s);
-const makeClashUrl     = s => 'clash://install-config?url=' + encodeURIComponent(s);
-const makeStreisandUrl  = s => 'streisand://import/'        + encodeURIComponent(s);
+// ── DEEPLINK BUILDERS ─────────────────────────────────────────────────────
+function makeHiddifyUrl(sub) { return 'hiddify://import/' + encodeURIComponent(sub); }
+function makeV2rayNUrl(sub) { return 'v2rayn://sub?url=' + encodeURIComponent(sub); }
+function makeClashUrl(clash) { return 'clash://install-config?url=' + encodeURIComponent(clash); }
+function makeStreisandUrl(sub) { return 'streisand://import/' + encodeURIComponent(sub); }
 
-// ── HAPP: проксируем через /happ-proxy на своём сервере (обход CORS) ──────
-// nginx на console.zapretcore.ru должен форвардить /happ-proxy → https://crypto.happ.su/api-v2.php
-// Конфиг nginx (добавить в server-блок):
-//
-//   location /happ-proxy {
-//       proxy_pass https://crypto.happ.su/api-v2.php;
-//       proxy_ssl_server_name on;
-//       proxy_set_header Content-Type "application/json";
-//       proxy_set_header Host crypto.happ.su;
-//       add_header Access-Control-Allow-Origin *;
-//       add_header Access-Control-Allow-Methods "POST, OPTIONS";
-//       add_header Access-Control-Allow-Headers "Content-Type";
-//       if ($request_method = OPTIONS) { return 204; }
-//   }
-//
-const HAPP_PROXY = '/happ-proxy';
-
-async function handleHappClick() {
-  const btn   = document.getElementById('btn-happ');
-  const badge = document.getElementById('happ-badge');
-  const sub   = document.getElementById('happ-sub');
-  if (!D.subUrl || btn.disabled) return;
-
-  btn.disabled       = true;
-  badge.textContent  = 'Загрузка...';
-  badge.className    = 'app-recommend-badge loading';
-  sub.textContent    = 'Получаем зашифрованную ссылку...';
-
+// ── HAPP CRYPTO ENCRYPTOR (Base64 Obfuscation) ─────────────────────────────
+// Используем happ://crypto/ с Base64 кодированием URL, чтобы скрыть оригинальную ссылку
+// от ручного редактирования в приложении Happ.
+function makeHappCryptoUrl(url, name) {
   try {
-    const res = await fetch(HAPP_PROXY, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ url: D.subUrl })
-    });
-
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const data = await res.json();
-    if (!data.encrypted_link) throw new Error('no encrypted_link');
-
-    // deeplink → открывает Happ если установлен
-    window.location.href = data.encrypted_link;
-    // буфер — fallback если приложения нет
-    try { await navigator.clipboard.writeText(data.encrypted_link); } catch(_){}
-
-    badge.textContent = 'Скопировано';
-    badge.className   = 'app-recommend-badge success';
-    sub.textContent   = 'Ссылка открыта и скопирована';
-
-  } catch (err) {
-    console.error('[Happ]', err);
-    badge.textContent = 'Ошибка';
-    badge.className   = 'app-recommend-badge error';
-    sub.textContent   = 'Не удалось получить ссылку';
-  } finally {
-    setTimeout(() => {
-      btn.disabled      = false;
-      badge.textContent = 'Защищено';
-      badge.className   = 'app-recommend-badge';
-      sub.textContent   = 'Зашифрованная автоподписка';
-    }, 3000);
+    // Кодируем URL в Base64
+    const base64Url = btoa(url).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    const safeName = name || 'Subscription';
+    
+    // Формат: happ://crypto/<base64>#name=<name>
+    return `happ://crypto/${base64Url}#name=${encodeURIComponent(safeName)}`;
+  } catch (e) {
+    console.error("Happ Crypto Encoding failed:", e);
+    // Fallback на обычный метод, если кодирование не удалось
+    return `happ://add/${encodeURIComponent(url)}#name=${encodeURIComponent(name || 'Subscription')}`;
   }
 }
 
 // ── RENDER ─────────────────────────────────────────────────────────────────
 function render(d) {
   if (d.subTitle) {
-    document.getElementById('page-title').textContent   = d.subTitle;
+    document.getElementById('page-title').textContent = d.subTitle;
     document.getElementById('footer-title').textContent = d.subTitle;
     document.title = d.subTitle + ' — Подписка';
   }
 
   const badge = document.getElementById('status-badge');
-  if (!d.enabled) { badge.className='badge off'; badge.textContent='Отключена'; badge.prepend(mkEl('span','badge-dot')); }
+  if (!d.enabled) {
+    badge.className = 'badge off';
+    badge.textContent = 'Отключена';
+    const dot = createEl('span', 'badge-dot');
+    badge.prepend(dot);
+  }
+
   document.getElementById('sid-text').textContent = d.sId.substring(0,8) + '…';
 
-  const pct = d.totalByte > 0 ? Math.min(100, Math.round((d.downloadByte+d.uploadByte)/d.totalByte*100)) : 0;
-  const bar=document.getElementById('bar-fill'), track=document.getElementById('bar-track'), pctEl=document.getElementById('traffic-pct');
-  bar.style.width=pct+'%'; track.setAttribute('aria-valuenow',pct); pctEl.textContent=pct+'%';
-  if (pct>=90)      { bar.className='bar-fill crit'; pctEl.style.color='var(--red)'; }
-  else if (pct>=70) { bar.className='bar-fill warn'; pctEl.style.color='var(--amber)'; }
-  else              { pctEl.style.color='var(--text)'; }
+  const pct = d.totalByte > 0
+    ? Math.min(100, Math.round((d.downloadByte + d.uploadByte) / d.totalByte * 100))
+    : 0;
+  const bar = document.getElementById('bar-fill');
+  const barTrack = document.getElementById('bar-track');
+  bar.style.width = pct + '%';
+  barTrack.setAttribute('aria-valuenow', pct);
+  
+  const pctEl = document.getElementById('traffic-pct');
+  if (pct >= 90) { bar.className='bar-fill crit'; pctEl.style.color='var(--red)'; }
+  else if (pct >= 70) { bar.className='bar-fill warn'; pctEl.style.color='var(--amber)'; }
+  else { pctEl.style.color='var(--text)'; }
+  pctEl.textContent = pct + '%';
 
   document.getElementById('used-val').textContent   = d.used;
   document.getElementById('remain-val').textContent = d.remained;
@@ -543,41 +920,76 @@ function render(d) {
   document.getElementById('dl-val').textContent     = d.download;
   document.getElementById('ul-val').textContent     = d.upload;
 
-  const expEl=document.getElementById('expire-val'); expEl.textContent=fmtDate(d.expire);
-  if (d.expire>0) { const days=Math.floor((d.expire-Date.now()/1000)/86400); if(days<3)expEl.className='meta-val crit'; else if(days<10)expEl.className='meta-val warn'; }
+  const expEl = document.getElementById('expire-val');
+  expEl.textContent = fmtDate(d.expire);
+  if (d.expire > 0) {
+    const days = Math.floor((d.expire - Date.now()/1000) / 86400);
+    if (days < 3)  expEl.className = 'meta-val crit';
+    else if (days < 10) expEl.className = 'meta-val warn';
+  }
 
-  const lastEl=document.getElementById('last-val'); lastEl.innerHTML='';
-  const ind=mkEl('span','online-indicator');
-  ind.appendChild(mkEl('span',(d.lastOnline&&Date.now()-d.lastOnline<3600000)?'online-dot':'online-dot old'));
-  ind.appendChild(document.createTextNode(fmtAgo(d.lastOnline)));
-  lastEl.appendChild(ind);
+  const isRecent = d.lastOnline && (Date.now() - d.lastOnline) < 3600000;
+  const lastEl = document.getElementById('last-val');
+  lastEl.innerHTML = '';
+  
+  const indicator = createEl('span', 'online-indicator');
+  const dot = createEl('span', isRecent ? 'online-dot' : 'online-dot old');
+  indicator.appendChild(dot);
+  indicator.appendChild(document.createTextNode(fmtAgo(d.lastOnline)));
+  lastEl.appendChild(indicator);
 
-  document.getElementById('sub-url-input').value   = d.subUrl      || '';
+  document.getElementById('sub-url-input').value   = d.subUrl   || '';
   document.getElementById('clash-url-input').value = d.subClashUrl || '';
   document.getElementById('json-url-input').value  = d.subJsonUrl  || '';
 
   if (d.subUrl) {
-    document.getElementById('btn-happ').addEventListener('click', handleHappClick);
+    // Генерируем защищенную ссылку для Happ
+    document.getElementById('btn-happ').href = makeHappCryptoUrl(d.subUrl, d.subTitle);
+    
     document.getElementById('btn-hiddify').href   = makeHiddifyUrl(d.subUrl);
     document.getElementById('btn-v2rayn').href    = makeV2rayNUrl(d.subUrl);
     document.getElementById('btn-streisand').href = makeStreisandUrl(d.subUrl);
   }
-  if (d.subClashUrl) document.getElementById('btn-clash').href = makeClashUrl(d.subClashUrl);
-  if (d.subSupportUrl) { document.getElementById('support-span').style.display='inline'; document.getElementById('support-link').href=d.subSupportUrl; }
+  if (d.subClashUrl) {
+    document.getElementById('btn-clash').href = makeClashUrl(d.subClashUrl);
+  }
+
+  if (d.subSupportUrl) {
+    document.getElementById('support-span').style.display = 'inline';
+    document.getElementById('support-link').href = d.subSupportUrl;
+  }
 
   if (d.links && d.links.length) {
-    document.getElementById('links-card').style.display='block';
-    document.getElementById('links-count').textContent='('+d.links.length+')';
-    const list=document.getElementById('links-list'); list.innerHTML='';
+    const card = document.getElementById('links-card');
+    card.style.display = 'block';
+    document.getElementById('links-count').textContent = '(' + d.links.length + ')';
+    const list = document.getElementById('links-list');
+    list.innerHTML = '';
+    
     d.links.forEach(link => {
-      const proto=protoOf(link), row=mkEl('div','link-row'), info=mkEl('div','link-info');
-      const pc=['vless','vmess','hysteria2','trojan','ss'].includes(proto)?proto:'vless';
-      info.appendChild(mkEl('span','link-proto '+pc,proto.toUpperCase()));
-      info.appendChild(mkEl('div','link-name',nameOf(link)));
-      info.appendChild(mkEl('div','link-host',hostOf(link)));
-      const btn=mkEl('button','link-copy-btn','Копировать'); btn.type='button';
-      btn.addEventListener('click',e=>copyText(link,e.currentTarget));
-      row.appendChild(info); row.appendChild(btn); list.appendChild(row);
+      const proto = protoOf(link);
+      const name  = nameOf(link);
+      const host  = hostOf(link);
+      
+      const row = createEl('div', 'link-row');
+      const info = createEl('div', 'link-info');
+      
+      const protoClass = ['vless','vmess','hysteria2','trojan','ss'].includes(proto) ? proto : 'vless';
+      const protoEl = createEl('span', 'link-proto ' + protoClass, proto.toUpperCase());
+      const nameEl = createEl('div', 'link-name', name);
+      const hostEl = createEl('div', 'link-host', host);
+      
+      info.appendChild(protoEl);
+      info.appendChild(nameEl);
+      info.appendChild(hostEl);
+      
+      const btn = createEl('button', 'link-copy-btn', 'Копировать');
+      btn.type = 'button';
+      btn.addEventListener('click', e => copyText(link, e.currentTarget));
+      
+      row.appendChild(info);
+      row.appendChild(btn);
+      list.appendChild(row);
     });
   }
 }
